@@ -14,7 +14,7 @@ export type User = {
 export class UsersService {
 
   private readonly users: User[] = [
-    { id: 1, name: 'John Doe', username: 'john', password: '121' },
+    { id: 1, name: 'Mathias Lawson', username: 'mathias', password: '121' },
     { id: 2, name: 'Jane Doe', username: 'jane', password: '122' },
     { id: 3, name: 'Bob Smith', username: 'bob', password: '123' },
   ];
