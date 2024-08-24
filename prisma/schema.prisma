@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Users
+model User {
+  user_id       Int       @id @default(autoincrement())
+  email         String    @unique
+  password_hash String
+  member        Member? 
+  role          UserRole
+  is_active     Boolean   @default(true)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+}
+
+
+enum UserRole {
+  ADMIN
+  ZONE_LEADER
+  FELLOWSHIP_LEADER
+  CELL_LEADER
+  MEMBER
+}
+
+
+// Zones
+model Zone {
+  zone_id      Int          @id @default(autoincrement())
+  name         String       @unique
+  leader_id    Int
+  fellowships  Fellowship[]
+  leader       Member       @relation("ZoneLeader", fields: [leader_id], references: [member_id])
+}
+
+// Fellowships
+model Fellowship {
+  fellowship_id   Int       @id @default(autoincrement())
+  zone_id         Int
+  name            String
+  leader_id       Int
+  cells           Cell[]
+  zone            Zone      @relation(fields: [zone_id], references: [zone_id])
+  leader          Member    @relation("FellowshipLeader", fields: [leader_id], references: [member_id])
+}
+
+// Cells
+model Cell {
+  cell_id         Int       @id @default(autoincrement())
+  fellowship_id   Int
+  name            String
+  leader_id       Int
+  members         Member[]
+  weekly_reports  WeeklyReport[]
+  fellowship      Fellowship @relation(fields: [fellowship_id], references: [fellowship_id])
+  leader          Member    @relation("CellLeader", fields: [leader_id], references: [member_id])
+}
+
+// Members
+model Member {
+  member_id       Int       @id @default(autoincrement())
+  user_id         Int       @unique  // This is now required (not optional)
+  cell_id         Int
+  surname         String
+  first_name      String
+  gender          Gender
+  birth_date      DateTime
+  occupation      String
+  address         String
+  cell            Cell      @relation(fields: [cell_id], references: [cell_id])
+  led_zones       Zone[]    @relation("ZoneLeader")
+  led_fellowships Fellowship[] @relation("FellowshipLeader")
+  led_cells       Cell[]    @relation("CellLeader")
+  user            User      @relation(fields: [user_id], references: [user_id])
+}
+
+// WeeklyReports
+model WeeklyReport {
+  report_id       Int       @id @default(autoincrement())
+  cell_id         Int
+  attendance      Int
+  new_members     Int
+  evangelism_report String
+  remarks         String
+  date            DateTime
+  cell            Cell      @relation(fields: [cell_id], references: [cell_id])
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
