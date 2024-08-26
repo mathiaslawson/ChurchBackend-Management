@@ -5,6 +5,9 @@ import { AuthenticatedGuard } from './auth/authenticated.guard';
 import { User, UsersService } from './users/users.service';
 import { CreateUserDto } from './users/dto/create-user.dto';
 import { Public } from '@prisma/client/runtime/library';
+import { Roles } from './users/roles.decorator';
+import {Role}  from './users/enums/role.enums';
+
 
 @Controller()
 export class AppController {
@@ -27,8 +30,9 @@ export class AppController {
   }
 
   @UseGuards(AuthenticatedGuard)
+  @Roles(Role.ADMIN)
   @Get('protected')
-  getHello(@Request() req): string{
+  getHello(@Request() req): unknown{
     return req.user
   }
 }

@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, SetMetadata } from '
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Role } from './entities/role.enum';
+import { Role } from './enums/role.enums';
 import { Roles } from './roles.decorator';
 
 @Controller('users')
