@@ -22,6 +22,16 @@ export interface User {
   updated_at: Date;
 }
 
+export interface Me {
+  user_id: number;
+  email: string;
+  username: string;
+  role: UserRole;
+  is_active: boolean;
+  created_at: Date;
+  updated_at: Date;
+}
+
 @Injectable()
 export class UsersService {
 

@@ -9,7 +9,7 @@ async function bootstrap() {
 
   app.use(
     session({
-      secret: 'mystic_dev', 
+      secret: process.env.SESSION_SECRETE, 
       resave: false, 
       saveUninitialized: false,
       cookie: {maxAge: 360000}
