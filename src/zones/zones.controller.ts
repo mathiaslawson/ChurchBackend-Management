@@ -1,20 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ZonesService } from './zones.service';
 import { CreateZoneDto } from './dto/create-zone.dto';
 import { UpdateZoneDto } from './dto/update-zone.dto';
+import { Role } from 'src/users/enums/role.enums';
+import { Roles } from 'src/users/roles.decorator';
+import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
+import { ZoneResponse } from './types';
 
-@Controller('zones')
+@Controller('api/v1/zones')
 export class ZonesController {
   constructor(private readonly zonesService: ZonesService) {}
 
+  @UseGuards(AuthenticatedGuard)
+  @Roles(Role.ADMIN, Role.ZONE_LEADER)
   @Post()
-  create(@Body() createZoneDto: CreateZoneDto) {
-    return this.zonesService.create(createZoneDto);
+  async create(@Body() req: CreateZoneDto): Promise<ZoneResponse | null> {
+    const zone = this.zonesService.create(req);
+    return zone;
   }
 
   @Get()
-  findAll() {
-    return this.zonesService.findAll();
+  async findAll(): Promise<ZoneResponse | null> {
+    // return this.zonesService.findAll();
+    return null;
   }
 
   @Get(':id')

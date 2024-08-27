@@ -1,8 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
+import { generateId } from 'src/utils';
 
 type UserRole = 'ADMIN' | 'ZONE_LEADER' | 'FELLOWSHIP_LEADER' | 'CELL_LEADER' | 'MEMBER';
 interface Member {
@@ -11,10 +12,13 @@ interface Member {
 
 
 export interface User {
-  user_id: number;
+  user_id: string;
   email: string;
   username: string;
   password: string;
+  firstname: string; 
+  lastname: string; 
+  birth_date: Date;
   member?: Member; 
   role: UserRole;
   is_active: boolean;
@@ -22,24 +26,45 @@ export interface User {
   updated_at: Date;
 }
 
+export interface RegisterResponse {
+  firstname: string; 
+  lastname: string; 
+  email: string;
+  birth_date: Date;
+  user_id: string;
+  username: string;
+  role: UserRole;
+  is_active: boolean;
+  created_at: Date;
+  updated_at: Date;
+  message: string;
+}
+
 export interface Me {
-  user_id: number;
+  user_id: string;
+  firstname: string; 
+  lastname: string; 
   email: string;
   username: string;
   role: UserRole;
   is_active: boolean;
   created_at: Date;
   updated_at: Date;
+  message: string;
 }
 
 @Injectable()
 export class UsersService {
 
-  constructor(private prisma: PrismaService){}
-  async create(dto: CreateUserDto): Promise<User | null> {
-  const { username, password, email, role } = dto;
-
-
+  constructor(private prisma: PrismaService) { }
+  
+  
+  async create(dto: CreateUserDto): Promise<RegisterResponse | null> {
+    const { username, password, email, role, birth_date, firstname, lastname } = dto;
+    
+    if(!email || !username || !password || !firstname || !lastname || !birth_date || !role){
+      throw new BadRequestException('Missing required fields');
+    } 
    // Check if a user with the same email already exists
   const userByEmail = await this.prisma.user.findUnique({
     where: { email },
@@ -64,28 +89,40 @@ export class UsersService {
   
 
   const newUser = await this.prisma.user.create({
-      data: {
+    data: {
+        user_id: generateId(),
         username,
         password: hashedPassword,
         email,
+        birth_date: new Date(birth_date).toISOString(),
+        firstname, 
+        lastname, 
         role,
         is_active: true,
       },
     })
-
   delete (newUser as Partial<User>).password;
-
-    return newUser;
+    return {
+        firstname: newUser.firstname,
+        lastname: newUser.lastname,
+        email: newUser.email,
+        username: newUser.username,
+        birth_date: newUser.birth_date,
+        user_id: newUser.user_id,
+        role: newUser.role,
+        is_active: newUser.is_active,
+        created_at: newUser.created_at,
+        updated_at: newUser.updated_at,
+        message: 'User created successfully'
+  };
   
 }
-  
-  
-
-  findAll() {
+    
+findAll() {
     return `This action returns all users`;
   }
 
-  async findOne(username: string): Promise<User | undefined> {
+async findOne(username: string): Promise<User | undefined> {
     const user = await this.prisma.user.findUnique({
       where: {
         username: username,

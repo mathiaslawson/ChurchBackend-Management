@@ -4,8 +4,17 @@ import { UpdateZoneDto } from './dto/update-zone.dto';
 
 @Injectable()
 export class ZonesService {
-  create(createZoneDto: CreateZoneDto) {
-    return 'This action adds a new zone';
+  create(data: CreateZoneDto) {
+    console.log(data);
+    return {
+      zone_id: '1',
+      zone_name: 'test',
+      zone_leader_id: '1',
+      zone_leader_name: 'test',
+      zone_location: 'test',
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
   }
 
   findAll() {
