@@ -6,8 +6,11 @@ import * as bcrypt from 'bcryptjs';
 import { generateId } from 'src/utils';
 
 type UserRole = 'ADMIN' | 'ZONE_LEADER' | 'FELLOWSHIP_LEADER' | 'CELL_LEADER' | 'MEMBER';
+
+
 interface Member {
   member_id: number;
+  cell_id: string;
 }
 
 
@@ -60,7 +63,7 @@ export class UsersService {
   
   
   async create(dto: CreateUserDto): Promise<RegisterResponse | null> {
-    const { username, password, email, role, birth_date, firstname, lastname } = dto;
+    const { username, password, email, role, birth_date, firstname, lastname, gender } = dto;
     
     if(!email || !username || !password || !firstname || !lastname || !birth_date || !role){
       throw new BadRequestException('Missing required fields');
@@ -88,19 +91,39 @@ export class UsersService {
  const hashedPassword = await bcrypt.hash(password, salt);
   
 
-  const newUser = await this.prisma.user.create({
-    data: {
-        user_id: generateId(),
+    let user_id = generateId();
+    
+  
+    const newUser = await this.prisma.user.create({
+      data: {
+        user_id,
         username,
         password: hashedPassword,
         email,
         birth_date: new Date(birth_date).toISOString(),
-        firstname, 
-        lastname, 
+        firstname,
+        lastname,
+        gender,
         role,
         is_active: true,
+        member: {
+          create: {
+            member_id: generateId(),
+            firstname,
+            lastname,
+            address: "",
+            occupation: "",
+            email,
+            role,
+            gender,
+            birth_date: new Date(birth_date).toISOString(),
+          }
+        }
       },
-    })
+    });
+
+
+
   delete (newUser as Partial<User>).password;
     return {
         firstname: newUser.firstname,

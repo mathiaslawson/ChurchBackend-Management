@@ -1,5 +1,5 @@
 import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsString, Length } from 'class-validator';
-import { Role } from '../enums/role.enums';
+import { Gender, Role } from '../enums/role.enums';
 import { Exclude, Expose } from 'class-transformer';
 
 export class CreateUserDto {
@@ -13,6 +13,10 @@ export class CreateUserDto {
     @IsString()
     lastname: string;
 
+    @IsNotEmpty()
+    @IsEnum(Role, { each: true })
+    gender: Gender
+
     @IsString()
     username: string; 
 
@@ -27,30 +31,3 @@ export class CreateUserDto {
     role: Role;
 }
  
-@Exclude()
-export class CreateUserResponseDto {
-    @Expose()
-    @IsString()
-    firstname: string; 
-
-    @Expose()
-    @IsString()
-    lastname: string;
-
-    @Expose()
-    @IsString()
-    username: string; 
-
-    @Expose()
-    @IsEmail()
-    email: string; 
-
-    @Expose()
-    @IsDateString()
-    birth_date: Date;
-
-    @Expose()
-    @IsNotEmpty()
-    @IsEnum(Role, { each: true })
-    role: Role;
-}

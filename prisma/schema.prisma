@@ -16,6 +16,7 @@ model User {
   firstname String
   birth_date      DateTime
   lastname String
+  gender Gender
   username      String    @unique
   member        Member? 
   role          UserRole
@@ -77,21 +78,24 @@ model Cell {
 model Member {
   member_id       String       @id 
   user_id         String       @unique  
-  cell_id         String
-  surname         String
-  first_name      String
+  cell_id         String?
+  firstname       String
+  lastname        String
+  email           String
   gender          Gender
+  role            UserRole
   birth_date      DateTime
-  occupation      String
-  address         String
-  cell            Cell      @relation(fields: [cell_id], references: [cell_id])
-  led_zones       Zone[]    @relation("ZoneLeader")
+  occupation      String?
+  address         String?
+  cell            Cell?        @relation(fields: [cell_id], references: [cell_id])
+  led_zones       Zone[]       @relation("ZoneLeader")
   led_fellowships Fellowship[] @relation("FellowshipLeader")
-  led_cells       Cell[]    @relation("CellLeader")
-  user            User      @relation(fields: [user_id], references: [user_id])
-  created_at    DateTime  @default(now())
-  updated_at    DateTime  @updatedAt
+  led_cells       Cell[]       @relation("CellLeader")
+  user            User         @relation(fields: [user_id], references: [user_id])
+  created_at      DateTime     @default(now())
+  updated_at      DateTime     @updatedAt
 }
+
 
 // WeeklyReports
 model WeeklyReport {
