@@ -38,10 +38,10 @@ enum UserRole {
 // Zones
 model Zone {
   zone_id      String          @id
-  zone_name    String       @unique
+  zone_name    String          @unique
   zone_leader_id    String
   fellowships  Fellowship[]
-  zone_leader_location String
+  zone_location String
   zone_leader       Member       @relation("ZoneLeader", fields: [zone_leader_id], references: [member_id])
   created_at    DateTime  @default(now())
   updated_at    DateTime  @updatedAt

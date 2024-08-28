@@ -14,29 +14,36 @@ export class ZonesController {
   @UseGuards(AuthenticatedGuard)
   @Roles(Role.ADMIN, Role.ZONE_LEADER)
   @Post()
-  async create(@Body() req: CreateZoneDto): Promise<ZoneResponse | null> {
+  async create(@Body() req: CreateZoneDto) {
     const zone = this.zonesService.create(req);
     return zone;
   }
 
+  @UseGuards(AuthenticatedGuard)
+  @Roles(Role.ADMIN, Role.ZONE_LEADER)
   @Get()
-  async findAll(): Promise<ZoneResponse | null> {
-    // return this.zonesService.findAll();
-    return null;
+  async findAll(){
+    const zone = this.zonesService.findAll();
+    return zone;
   }
-
+  @UseGuards(AuthenticatedGuard)
+  @Roles(Role.ADMIN, Role.ZONE_LEADER)
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.zonesService.findOne(+id);
+    return this.zonesService.findOne(id.toString());
   }
 
+  @UseGuards(AuthenticatedGuard)
+  @Roles(Role.ADMIN, Role.ZONE_LEADER)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateZoneDto: UpdateZoneDto) {
-    return this.zonesService.update(+id, updateZoneDto);
+    return this.zonesService.update(id.toString(), updateZoneDto);
   }
 
+  @UseGuards(AuthenticatedGuard)
+  @Roles(Role.ADMIN, Role.ZONE_LEADER)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.zonesService.remove(+id);
+    return this.zonesService.remove(id.toString());
   }
 }
