@@ -1,0 +1,114 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Users
+model User {
+  user_id       String       @id 
+  email         String    @unique
+  password String
+  firstname String
+  birth_date      DateTime
+  lastname String
+  gender Gender
+  username      String    @unique
+  member        Member? 
+  role          UserRole
+  is_active     Boolean   @default(false)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+}
+
+
+enum UserRole {
+  ADMIN
+  ZONE_LEADER
+  FELLOWSHIP_LEADER
+  CELL_LEADER
+  MEMBER
+}
+
+// Zones
+model Zone {
+  zone_id      String          @id
+  zone_name    String          @unique
+  zone_leader_id    String
+  fellowships  Fellowship[]
+  zone_location String
+  zone_leader       Member       @relation("ZoneLeader", fields: [zone_leader_id], references: [member_id])
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+}
+
+// Fellowships
+model Fellowship {
+  fellowship_id   String       @id
+  zone_id         String
+  fellowship_name            String  @unique
+  fellowship_leader_id       String
+  cells           Cell[]
+  zone            Zone      @relation(fields: [zone_id], references: [zone_id])
+  leader          Member    @relation("FellowshipLeader", fields: [fellowship_leader_id], references: [member_id])
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+}
+
+// Cells
+model Cell {
+  cell_id         String       @id 
+  fellowship_id   String
+  cell_name            String  @unique
+  cell_leader_id       String
+  members         Member[]
+  weekly_reports  WeeklyReport[]
+  fellowship      Fellowship @relation(fields: [fellowship_id], references: [fellowship_id])
+  leader          Member    @relation("CellLeader", fields: [cell_leader_id], references: [member_id])
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+}
+
+// Members
+model Member {
+  member_id       String       @id 
+  user_id         String       @unique  
+  cell_id         String?
+  firstname       String
+  lastname        String
+  email           String
+  gender          Gender
+  role            UserRole
+  birth_date      DateTime
+  occupation      String?
+  address         String?
+  cell            Cell?        @relation(fields: [cell_id], references: [cell_id])
+  led_zones       Zone[]       @relation("ZoneLeader")
+  led_fellowships Fellowship[] @relation("FellowshipLeader")
+  led_cells       Cell[]       @relation("CellLeader")
+  user            User         @relation(fields: [user_id], references: [user_id])
+  created_at      DateTime     @default(now())
+  updated_at      DateTime     @updatedAt
+}
+
+
+// WeeklyReports
+model WeeklyReport {
+  report_id       String       @id
+  cell_id         String
+  attendance      String
+  new_members     String
+  evangelism_report String
+  remarks         String
+  date            DateTime
+  cell            Cell      @relation(fields: [cell_id], references: [cell_id])
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}

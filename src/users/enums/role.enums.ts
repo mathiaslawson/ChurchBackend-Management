@@ -1,0 +1,12 @@
+export enum Role {
+  ZONE_LEADER = 'ZONE_LEADER',
+  FELLOWSHIP_LEADER = 'FELLOWSHIP_LEADER',
+  CELL_LEADER = 'CELL_LEADER',
+  MEMBER = 'MEMBER',
+   ADMIN = 'ADMIN',
+}
+
+export enum Gender {
+  MALE = "MALE",
+  FEMALE = "FEMALE"
+}
