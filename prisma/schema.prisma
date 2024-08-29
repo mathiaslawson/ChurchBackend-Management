@@ -64,11 +64,11 @@ model Cell {
   cell_id         String       @id 
   fellowship_id   String
   cell_name            String  @unique
-  leader_id       String
+  cell_leader_id       String
   members         Member[]
   weekly_reports  WeeklyReport[]
   fellowship      Fellowship @relation(fields: [fellowship_id], references: [fellowship_id])
-  leader          Member    @relation("CellLeader", fields: [leader_id], references: [member_id])
+  leader          Member    @relation("CellLeader", fields: [cell_leader_id], references: [member_id])
   created_at    DateTime  @default(now())
   updated_at    DateTime  @updatedAt
 }

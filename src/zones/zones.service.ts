@@ -50,6 +50,7 @@ export class ZonesService {
       include: 
       {
         zone_leader: true, 
+        fellowships: true,
       }
     });    
 
@@ -67,7 +68,8 @@ export class ZonesService {
     const zone = await this.prisma.zone.findUnique({  
       where: { zone_id: id },
       include: {
-        zone_leader: true
+        zone_leader: true, 
+        fellowships: true, 
       }
     });
     // check if zone exists

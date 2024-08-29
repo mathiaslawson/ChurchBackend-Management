@@ -50,6 +50,7 @@ export class FellowshipService {
     include: {
       zone: true, 
       leader: true, 
+      cells: true, 
     },
   });
    
@@ -70,6 +71,7 @@ export class FellowshipService {
       include: {
         leader: true, 
         zone: true,
+        cells: true, 
       }
     });
 
