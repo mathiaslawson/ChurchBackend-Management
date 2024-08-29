@@ -34,7 +34,6 @@ enum UserRole {
   MEMBER
 }
 
-
 // Zones
 model Zone {
   zone_id      String          @id
@@ -51,7 +50,7 @@ model Zone {
 model Fellowship {
   fellowship_id   String       @id
   zone_id         String
-  fellowship_name            String
+  fellowship_name            String  @unique
   fellowship_leader_id       String
   cells           Cell[]
   zone            Zone      @relation(fields: [zone_id], references: [zone_id])
@@ -64,7 +63,7 @@ model Fellowship {
 model Cell {
   cell_id         String       @id 
   fellowship_id   String
-  name            String
+  cell_name            String  @unique
   leader_id       String
   members         Member[]
   weekly_reports  WeeklyReport[]

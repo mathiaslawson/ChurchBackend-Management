@@ -46,7 +46,12 @@ export class ZonesService {
 
   async findAll() {  
     // check if there is data 
-    const zones = await this.prisma.zone.findMany();    
+    const zones = await this.prisma.zone.findMany({
+      include: 
+      {
+        zone_leader: true, 
+      }
+    });    
 
     if (zones && zones.length === 0) {
       return {
@@ -60,7 +65,10 @@ export class ZonesService {
 
   async findOne(id: string) {
     const zone = await this.prisma.zone.findUnique({  
-      where: { zone_id: id }
+      where: { zone_id: id },
+      include: {
+        zone_leader: true
+      }
     });
     // check if zone exists
     if (!zone) {

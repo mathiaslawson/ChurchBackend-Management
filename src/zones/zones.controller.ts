@@ -6,7 +6,9 @@ import { Role } from 'src/users/enums/role.enums';
 import { Roles } from 'src/users/roles.decorator';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { ZoneResponse } from './types';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('zones')
 @Controller('api/v1/zones')
 export class ZonesController {
   constructor(private readonly zonesService: ZonesService) {}
