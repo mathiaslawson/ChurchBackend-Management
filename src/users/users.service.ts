@@ -142,7 +142,16 @@ export class UsersService {
 }
     
 async findAll() {
-  const users = await this.prisma.member.findMany();
+  const users = await this.prisma.member.findMany(
+    {
+      include: {
+        led_fellowships: true, 
+        led_zones: true,
+        led_cells: true,
+        cell: true, 
+      }
+    }
+  );
 
   return users;
   }
