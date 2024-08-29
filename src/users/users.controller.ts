@@ -7,18 +7,15 @@ import { Roles } from './roles.decorator';
 import { ApiTags } from '@nestjs/swagger';
 
 
-@ApiTags('users')
-@Controller('users')
+
+@Controller('/api/v1/users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  @Roles(Role.ADMIN)
-  // create(@Body() createUserDto: CreateUserDto) {
-  //   return this.usersService.create(createUserDto);
-  // }
+
 
   @Get()
+   @Roles(Role.ADMIN, Role.CELL_LEADER, Role.FELLOWSHIP_LEADER, Role.ZONE_LEADER)  
   findAll() {
     return this.usersService.findAll();
   }
