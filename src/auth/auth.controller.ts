@@ -38,7 +38,7 @@ export class AuthController {
   }
 
   @UseGuards(AuthenticatedGuard)
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.CELL_LEADER, Role.FELLOWSHIP_LEADER, Role.ZONE_LEADER, Role.MEMBER)
   @Get('me')
   @ApiOperation({ summary: 'Get current user information' })
   @ApiBearerAuth()

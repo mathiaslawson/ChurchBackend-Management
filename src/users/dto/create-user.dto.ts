@@ -13,18 +13,18 @@ export class CreateUserDto {
     @IsString()
     lastname: string;
 
-    @IsNotEmpty()
-    @IsEnum(Role, { each: true })
-    gender: Gender
+    // @IsNotEmpty()
+    // @IsEnum(Role, { each: true })
+    // gender: Gender
 
-    @IsString()
-    username: string; 
+    // @IsString()
+    // username: string; 
 
     @IsEmail()
     email: string; 
 
-    @IsDateString()
-    birth_date: Date;
+    // @IsDateString()
+    // birth_date: Date;
 
     @IsNotEmpty()
     @IsEnum(Role, { each: true })

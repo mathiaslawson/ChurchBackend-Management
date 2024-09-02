@@ -10,9 +10,13 @@ export class AuthService {
   constructor(private usersService: UsersService) {}
 
   // check if user exists in db
-  async validateUser(username: string, password: string): Promise<unknown | null> {
-    console.log(username, password);
-    const user = await this.usersService.findOne(username);
+  async validateUser(email: string, password: string): Promise<unknown | null> {
+
+    console.log(email, password);
+
+    const user = await this.usersService.findOne(email);
+
+    console.log(user)
 
     if (!user) {
       return new NotFoundException('User not found');

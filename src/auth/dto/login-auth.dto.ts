@@ -8,5 +8,5 @@ export class LoginAuthDto {
     password: string; 
     
     @IsString()
-    username: string; 
+    email: string; 
 }

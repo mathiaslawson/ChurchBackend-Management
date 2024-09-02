@@ -14,10 +14,10 @@ model User {
   email         String    @unique
   password String
   firstname String
-  birth_date      DateTime
+  birth_date      DateTime?
   lastname String
-  gender Gender
-  username      String    @unique
+  gender Gender?
+  username      String?    @unique
   member        Member? 
   role          UserRole
   is_active     Boolean   @default(false)
@@ -81,9 +81,9 @@ model Member {
   firstname       String
   lastname        String
   email           String
-  gender          Gender
+  gender          Gender?
   role            UserRole
-  birth_date      DateTime
+  birth_date      DateTime?
   occupation      String?
   address         String?
   cell            Cell?        @relation(fields: [cell_id], references: [cell_id])

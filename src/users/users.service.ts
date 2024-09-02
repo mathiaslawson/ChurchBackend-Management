@@ -63,9 +63,9 @@ export class UsersService {
   
   
   async create(dto: CreateUserDto): Promise<RegisterResponse | null> {
-    const { username, password, email, role, birth_date, firstname, lastname, gender } = dto;
+    const {password, email, role, firstname, lastname } = dto;
     
-    if(!email || !username || !password || !firstname || !lastname || !birth_date || !role){
+    if(!email || !password || !firstname || !lastname || !role){
       throw new BadRequestException('Missing required fields');
     } 
    // Check if a user with the same email already exists
@@ -77,14 +77,14 @@ export class UsersService {
     throw new ConflictException('A user with this email already exists');
   }
 
-  // Check if a user with the same username already exists
-  const userByUsername = await this.prisma.user.findUnique({
-    where: { username },
-  });
+  // // Check if a user with the same username already exists
+  // const userByUsername = await this.prisma.user.findUnique({
+  //   where: { email },
+  // });
 
-  if (userByUsername) {
-    throw new ConflictException('A user with this username already exists');
-  }
+  // if (userByUsername) {
+  //   throw new ConflictException('A user with this username already exists');
+  // }
 
 
  const salt = await bcrypt.genSalt();
@@ -97,13 +97,13 @@ export class UsersService {
     const newUser = await this.prisma.user.create({
       data: {
         user_id,
-        username,
+        // username,
         password: hashedPassword,
         email,
-        birth_date: new Date(birth_date).toISOString(),
+        // birth_date: new Date(birth_date).toISOString(),
         firstname,
         lastname,
-        gender,
+        // gender,
         role,
         is_active: true,
         member: {
@@ -115,8 +115,8 @@ export class UsersService {
             occupation: "",
             email,
             role,
-            gender,
-            birth_date: new Date(birth_date).toISOString(),
+            // gender,
+            // birth_date: new Date(birth_date).toISOString(),
           }
         }
       },
@@ -156,10 +156,10 @@ async findAll() {
   return users;
   }
 
-async findOne(username: string): Promise<User | undefined> {
+async findOne(email: string): Promise<User | undefined> {
     const user = await this.prisma.user.findUnique({
       where: {
-        username: username,
+        email: email,
       }
     })
     return user;
