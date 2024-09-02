@@ -103,19 +103,7 @@ export class UsersService {
     lastname,
     role,
     is_active: true,
-    member: {
-      create: {
-        member_id: generateId(),
-        firstname,
-        lastname,
-        address: "", 
-        occupation: "", 
-        email,
-        role,
-        gender: 'MALE',
-        birth_date: new Date(), 
-      }
-    }
+  
   },
 });
 
