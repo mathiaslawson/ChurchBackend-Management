@@ -100,7 +100,7 @@ export class UsersService {
         username : "",
         password: hashedPassword,
         email,
-        birth_date: null,
+        birth_date: new Date().toISOString(),
         firstname,
         lastname,
         gender :'MALE',
@@ -115,8 +115,8 @@ export class UsersService {
             occupation: "",
             email,
             role,
-            gender: null,
-            birth_date: null,
+            gender: 'MALE',
+            birth_date: new Date().toISOString(),
           }
         }
       },
