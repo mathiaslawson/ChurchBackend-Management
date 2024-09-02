@@ -30,16 +30,16 @@ export interface User {
 }
 
 export interface RegisterResponse {
-  // firstname: string; 
-  // lastname: string; 
-  // email: string;
-  // // birth_date: Date;
-  // user_id: string;
-  // // username: string;
-  // role: UserRole;
-  // is_active: boolean;
-  // created_at: Date;
-  // updated_at: Date;
+  firstname: string; 
+  lastname: string; 
+  email: string;
+  // birth_date: Date;
+  user_id: string;
+  // username: string;
+  role: UserRole;
+  is_active: boolean;
+  created_at: Date;
+  updated_at: Date;
   message: string;
 }
 
@@ -94,48 +94,45 @@ export class UsersService {
     let user_id = generateId();
     
   
-    const newUser = await this.prisma.user.create({
-      data: {
-        user_id,
-        // username,
-        password: hashedPassword,
-        email,
-        // birth_date: new Date(birth_date).toISOString(),
+ const newUser = await this.prisma.user.create({
+  data: {
+    user_id,
+    password: hashedPassword,
+    email,
+    firstname,
+    lastname,
+    role,
+    is_active: true,
+    member: {
+      create: {
+        member_id: generateId(),
         firstname,
         lastname,
-        // gender,
+        address: "", 
+        occupation: "", 
+        email,
         role,
-        is_active: true,
-        member: {
-          create: {
-            member_id: generateId(),
-            firstname,
-            lastname,
-            address: "",
-            occupation: "",
-            email,
-            role,
-            gender: 'MALE',
-            birth_date: "",
-          }
-        }
-      },
-    });
+        gender: 'MALE',
+        birth_date: new Date(), 
+      }
+    }
+  },
+});
 
 
 
   delete (newUser as Partial<User>).password;
     return {
-        // firstname: newUser.firstname,
-        // lastname: newUser.lastname,
-        // email: newUser.email,
-        // // username: newUser.username,
-        // // birth_date: newUser.birth_date,
-        // user_id: newUser.user_id,
-        // role: newUser.role,
-        // is_active: newUser.is_active,
-        // created_at: newUser.created_at,
-        // updated_at: newUser.updated_at,
+        firstname: newUser.firstname,
+        lastname: newUser.lastname,
+        email: newUser.email,
+        // username: newUser.username,
+        // birth_date: newUser.birth_date,
+        user_id: newUser.user_id,
+        role: newUser.role,
+        is_active: newUser.is_active,
+        created_at: newUser.created_at,
+        updated_at: newUser.updated_at,
         message: 'User created successfully'
   };
   
