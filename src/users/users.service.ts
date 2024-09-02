@@ -115,8 +115,8 @@ export class UsersService {
             occupation: "",
             email,
             role,
-            // gender,
-            // birth_date: new Date(birth_date).toISOString(),
+            gender: 'MALE',
+            birth_date: "",
           }
         }
       },
