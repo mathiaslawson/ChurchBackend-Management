@@ -17,7 +17,7 @@ model User {
   birth_date      DateTime?
   lastname String
   gender Gender?
-  username      String?    @unique
+  username      String?    
   member        Member? 
   role          UserRole
   is_active     Boolean   @default(false)
