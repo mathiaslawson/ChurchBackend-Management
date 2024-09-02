@@ -17,11 +17,11 @@ interface Member {
 export interface User {
   user_id: string;
   email: string;
-  username: string;
+  // username: string;
   password: string;
   firstname: string; 
   lastname: string; 
-  birth_date: Date;
+  // birth_date: Date;
   member?: Member; 
   role: UserRole;
   is_active: boolean;
@@ -33,9 +33,9 @@ export interface RegisterResponse {
   firstname: string; 
   lastname: string; 
   email: string;
-  birth_date: Date;
+  // birth_date: Date;
   user_id: string;
-  username: string;
+  // username: string;
   role: UserRole;
   is_active: boolean;
   created_at: Date;
@@ -129,8 +129,8 @@ export class UsersService {
         firstname: newUser.firstname,
         lastname: newUser.lastname,
         email: newUser.email,
-        username: newUser.username,
-        birth_date: newUser.birth_date,
+        // username: newUser.username,
+        // birth_date: newUser.birth_date,
         user_id: newUser.user_id,
         role: newUser.role,
         is_active: newUser.is_active,
