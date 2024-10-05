@@ -13,7 +13,9 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Mystic')
-    .setDescription('The Church Membership Management System Backend API Documentation')
+    .setDescription(
+        'The Church Membership Management System Backend API Documentation',
+    )
     .setVersion('1.0.0')
     .build();
   
