@@ -7,13 +7,15 @@ import { Roles } from 'src/users/roles.decorator';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { ZoneResponse } from './types';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/users/roles.guard';
 
 @ApiTags('Zones')
 @Controller('api/v1/zones')
 export class ZonesController {
   constructor(private readonly zonesService: ZonesService) {}
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.ZONE_LEADER)
   @ApiOperation({ summary: 'Create a new zone' })
   @ApiOkResponse({
@@ -25,20 +27,21 @@ export class ZonesController {
     return zone;
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.ZONE_LEADER)
   @ApiOperation({ summary: 'Fetch all available zones' })
   @ApiOkResponse({
     description: 'Operation Succesful',
     type: CreateZoneDto,
-    isArray: true
+    isArray: true,
   })
   @Get()
-  async findAll(){
+  async findAll() {
     const zone = this.zonesService.findAll();
     return zone;
   }
-  @UseGuards(AuthenticatedGuard)
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.ZONE_LEADER)
   @ApiOperation({ summary: 'Fetch data for specific zone' })
   @Get(':id')
@@ -46,7 +49,7 @@ export class ZonesController {
     return this.zonesService.findOne(id.toString());
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.ZONE_LEADER)
   @ApiOperation({ summary: 'Update Zone' })
   @Patch(':id')
@@ -54,7 +57,7 @@ export class ZonesController {
     return this.zonesService.update(id.toString(), updateZoneDto);
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.ZONE_LEADER)
   @ApiOperation({ summary: 'Delete Zone' })
   @Delete(':id')

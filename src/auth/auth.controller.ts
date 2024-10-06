@@ -8,14 +8,16 @@ import { Role } from 'src/users/enums/role.enums';
 import { AuthenticatedGuard } from './authenticated.guard';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { RolesGuard } from 'src/users/roles.guard';
 
 @ApiTags('Auth')
 @Controller('/api/v1/auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly userService: UsersService
-  ) { }
+    private readonly userService: UsersService,
+  ) {}
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
@@ -23,8 +25,12 @@ export class AuthController {
   @ApiBody({ type: LoginAuthDto })
   // @ApiResponse({ status: 200, description: 'User logged in successfully', type: Me })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  login(@Request() req: { user: Me }): Me {
-    return req.user;
+  login(@Request() req: { user: Me }): any {
+    return this.authService.login(
+      req.user.email,
+      req.user.user_id,
+      req.user.role,
+    );
   }
 
   @Post('register')
@@ -37,15 +43,16 @@ export class AuthController {
     return user;
   }
 
-  @UseGuards(AuthenticatedGuard)
-  @Roles(Role.ADMIN, Role.CELL_LEADER, Role.FELLOWSHIP_LEADER, Role.ZONE_LEADER, Role.MEMBER)
+  @Roles(
+    Role.ADMIN,
+    Role.CELL_LEADER,
+    Role.FELLOWSHIP_LEADER,
+    Role.ZONE_LEADER,
+    Role.MEMBER,
+  )
   @Get('me')
-  @ApiOperation({ summary: 'Get current user information' })
-  @ApiBearerAuth()
-  // @ApiResponse({ status: 200, description: 'User information retrieved successfully', type: User })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
+  @UseGuards(JwtAuthGuard, RolesGuard)
   getMe(@Request() req): unknown {
-    return req.user;
+  return req.user;
   }
 }

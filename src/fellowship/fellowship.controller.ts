@@ -5,12 +5,14 @@ import { UpdateFellowshipDto } from './dto/update-fellowship.dto';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { Role } from 'src/users/enums/role.enums';
 import { Roles } from 'src/users/roles.decorator';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/users/roles.guard';
 
 @Controller('api/v1/fellowships')
 export class FellowshipController {
   constructor(private readonly fellowshipService: FellowshipService) {}
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.FELLOWSHIP_LEADER)
   @Post()
   async create(@Body() req: CreateFellowshipDto) {
@@ -18,28 +20,29 @@ export class FellowshipController {
     return zone;
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.FELLOWSHIP_LEADER)
   @Get()
-  async findAll(){
+  async findAll() {
     const zone = this.fellowshipService.findAll();
     return zone;
   }
-  @UseGuards(AuthenticatedGuard)
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.FELLOWSHIP_LEADER)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.fellowshipService.findOne(id.toString());
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.FELLOWSHIP_LEADER)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateZoneDto: UpdateFellowshipDto) {
     return this.fellowshipService.update(id.toString(), updateZoneDto);
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.FELLOWSHIP_LEADER)
   @Delete(':id')
   remove(@Param('id') id: string) {
