@@ -9,13 +9,16 @@ export class ZonesService {
 
    constructor(private prisma: PrismaService) { }
 
-   async create(dto: CreateZoneDto) {
-     const { zone_leader_id, zone_leader, zone_name, zone_location } = dto;
+  async create(dto: CreateZoneDto) {
+     console.log('you were called')
+     const { zone_leader_id, zone_name, zone_location } = dto;
      
     //  check member id
      const checkLeaderId = await this.prisma.member.findUnique({
      where: {member_id : zone_leader_id}
      })
+
+     console.log('checleaser i', checkLeaderId);
 
      //  getZones
      const zones = await this.prisma.zone.findUnique({

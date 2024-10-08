@@ -5,9 +5,6 @@ export class CreateZoneDto {
     zone_name: string;
 
     @IsString()
-    zone_leader: string;
-
-    @IsString()
     zone_location: string;
 
     @IsString()

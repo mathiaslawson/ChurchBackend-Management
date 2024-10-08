@@ -16,16 +16,16 @@ export class FellowshipController {
   @Roles(Role.ADMIN, Role.FELLOWSHIP_LEADER)
   @Post()
   async create(@Body() req: CreateFellowshipDto) {
-    const zone = this.fellowshipService.create(req);
-    return zone;
+    const fellowship = this.fellowshipService.create(req);
+    return fellowship;
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.FELLOWSHIP_LEADER)
   @Get()
   async findAll() {
-    const zone = this.fellowshipService.findAll();
-    return zone;
+    const fellowship = this.fellowshipService.findAll();
+    return fellowship;
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

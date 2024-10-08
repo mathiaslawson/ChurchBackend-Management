@@ -23,10 +23,17 @@ export class FellowshipService {
       throw new ConflictException('This Fellowship Already Exists');
     }
 
+
+    console.log(fellowship_leader_id, 'this is the fello leader_id')
+
     // check if leader is a fellowship leader
     const checkLeaderId = await this.prisma.member.findUnique({
-     where: {member_id : fellowship_leader_id}
-    })
+     where: { member_id: fellowship_leader_id },
+    });
+
+
+     console.log(checkLeaderId, 'results of leader ID')
+
       //validate fellowship leader
      if (checkLeaderId && checkLeaderId.role !== "FELLOWSHIP_LEADER") { 
        throw new ConflictException('Only Fellowship Leaders Can Lead A Fellowships, Check If Selected Participant is A Zone Leader');
@@ -34,9 +41,9 @@ export class FellowshipService {
     
     const newFellowship = await this.prisma.fellowship.create({
       data: {
-        fellowship_id: generateId(), 
-        fellowship_name, 
-        fellowship_leader_id, 
+        fellowship_id: generateId(),
+        fellowship_name,
+        fellowship_leader_id,
         zone_id,
       }
     })
@@ -44,7 +51,7 @@ export class FellowshipService {
     return newFellowship;
   }
 
- async findAll() {
+  async findAll() {
     // check if there is data 
   const fellowships = await this.prisma.fellowship.findMany({
     include: {
