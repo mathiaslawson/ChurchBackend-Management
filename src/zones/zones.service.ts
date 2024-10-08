@@ -105,20 +105,26 @@ export class ZonesService {
 
    return updatedZone;
   }
-
+  
   async remove(id: string) {
 
+    console.log('check the id', id)
      const zone = await this.prisma.zone.findUnique({  
       where: { zone_id: id }
-    });
+     });
+    
+    console.log(!zone, 'here is the zone')
+    
     // check if zone exists
     if (!zone) {
       throw new NotFoundException(`Zone does not exist`);
     }
 
     const deletedZone = await this.prisma.zone.delete({  
-      where: { zone_id: id }
+      where: { zone_id: zone.zone_id }
     });
+
+    console.log(deletedZone, 'you were deleted')
 
      return deletedZone;
   }
